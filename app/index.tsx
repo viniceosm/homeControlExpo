@@ -1,97 +1,54 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; // Assuming Ionicons is available from @expo/vector-icons
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Assuming you have Ionicons available
+import { useRouter } from 'expo-router';
 
-export default function HomeScreen() {
-  const [showValues, setShowValues] = useState(true);
-  const insets = useSafeAreaInsets();
+export default function LoginScreen() {
+  const router = useRouter();
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const toggleShowValues = () => {
-    setShowValues(!showValues);
+  const handleLogin = () => {
+    // Implement login logic here
+    router.push('/home');
+    console.log('Login attempted with:', { email, password });
   };
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top + 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
-        <View style={styles.userInfo}>
-          <Ionicons name="person-circle-outline" size={30} color="white" />
-          <Text style={styles.greeting}>Olá, Gabriela</Text>
-        </View>
-        <View style={styles.icons}>
-          <TouchableOpacity onPress={toggleShowValues}>
-            <Ionicons name={showValues ? "eye-outline" : "eye-off-outline"} size={24} color="white" style={styles.icon} />
-          </TouchableOpacity>
+      {/* Placeholder for Logo */}
+      <View style={styles.logoPlaceholder}></View>
 
-          <Ionicons name="help-circle-outline" size={24} color="white" style={styles.icon} />
-        </View>
+      <Text style={styles.title}>Acesse sua conta</Text>
+
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Email" // Placeholder text
+          keyboardType="email-address"
+          onChangeText={setEmail}
+        />
       </View>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {/* Add more components here to match the image layout */}
-        <View style={styles.accountSection}>
-          <View>
-            <Text style={styles.accountLabel}>Conta</Text>
-            <Text style={styles.balanceAmount}>{showValues ? 'R$ 1.356,98' : '********'}</Text>
-          </View>
-          <Ionicons name="chevron-forward" size={20} color="#999" />
-        </View>
 
-        <View style={styles.paymentOptionsContainer}>
-          {/* Grupos */}
-          <View style={styles.paymentOptionWrapper}>
- <View style={styles.circularButton}>
- <Ionicons name="people-outline" size={30} color="#673AB7" />
- </View>
- <Text style={styles.paymentLabel}>Grupos</Text>
-          </View>
-          {/* Gastos */}
-          <View style={styles.paymentOptionWrapper}>
- <View style={styles.circularButton}>
- <Ionicons name="wallet-outline" size={30} color="#673AB7" />
- </View>
- <Text style={styles.paymentLabel}>Gastos</Text>
-          </View>
-          {/* Gastos Previstos */}
-          <View style={styles.paymentOptionWrapper}>
- <View style={[styles.circularButton, { marginBottom: 5 }]}>
- <Ionicons name="calendar-outline" size={30} color="#673AB7" />
- </View>
- <Text style={styles.paymentLabel}>Gastos Previstos</Text>
-          </View>
-          {/* Categorias */}
-          <View style={styles.paymentOption}>
- <View style={[styles.circularButton, { marginBottom: 5 }]}>
- <Ionicons name="pricetag-outline" size={30} color="#673AB7" />
- </View>
- <Text style={styles.paymentLabel}>Categorias</Text>
-          </View>
-          {/* Contas */}
-          {/* Removed the "Contas" button as requested */}
-        </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Senha" // Placeholder text
+          secureTextEntry={!showPassword}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggle}>
+          <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={24} color="#888" />
+        </TouchableOpacity>
+      </View>
 
-        {/* Add "Meus cartões" section */}
-        <View style={styles.myCardsSection}>
-          <Ionicons name="card-outline" size={24} color="#000" />
-          <Text style={styles.myCardsText}>Meus cartões</Text>
-          <Ionicons name="chevron-forward" size={20} color="#999" />
-        </View>
-        {/* Add "Cartão de crédito" section */}
-        <View style={styles.creditCardSection}>
-          <View>
-            <Text style={styles.creditCardTitle}>Cartão de crédito</Text>
-            <Text style={styles.currentInvoiceLabel}>Fatura atual</Text>
-            <Text style={styles.currentInvoiceAmount}>{showValues ? <>R$ 1.094<Text style={{ fontSize: 16, fontWeight: 'normal' }}>,80</Text></> : '********'}</Text>
-            <Text style={styles.limitText}>{showValues ? 'Limite disponível: R$ 730,00' : '********'}</Text>
-          </View>
-          <Ionicons name="chevron-forward-outline" size={20} color="#999" />
-        </View>
-        {/* Add other sections as needed */}
+      <Text style={styles.passwordHint}>Possui 8 caracteres ou mais</Text>
 
-        {/* Add a placeholder for the bottom content if needed */}
-        <View style={styles.bottomContent}>
-          {/* Content that should be at the bottom */}
-        </View>
-      </ScrollView>
+      <TouchableOpacity style={styles.continueButton} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Continuar</Text>
+        <Ionicons name="arrow-forward-outline" size={24} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -99,129 +56,55 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
- backgroundColor: '#fff', // Assuming a white background for the rest of the screen
-  },
-  scrollViewContent: {
-    paddingBottom: 20, // Add some padding at the bottom of the scroll view
-  },
-  header: {
-    backgroundColor: '#673AB7', // Using a purple color, you can adjust this
-    padding: 20, // Keep horizontal padding
-    flexDirection: 'row', // Explicitly set flexDirection to 'row'
-    paddingBottom: 40, // Increased bottom padding
-
-  },
-  userInfo: {
-    flexDirection: 'row',
-  },
-  greeting: {
-    color: 'white',
-    fontSize: 18,
-    marginLeft: 10,
-  },
-  icons: {
-    flexDirection: 'row', // Set flexDirection to row for horizontal alignment
-    alignItems: 'center', // Keep vertical alignment centered
-  },
-  icon: {
-    marginLeft: 20, // Increased spacing between icons
-  },
-  accountSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: '#fff',
     padding: 20,
+  },
+  logoPlaceholder: {
+    width: 100,
+    height: 100,
+    backgroundColor: '#eee', // Placeholder color
+    alignSelf: 'center',
+    marginTop: 50,
+    marginBottom: 30,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    backgroundColor: '#fff',
-    marginBottom: 10, // Space after account section
+    borderBottomColor: '#ccc',
+    marginBottom: 20,
   },
-  accountLabel: {
-    fontSize: 14,
-    color: '#999',
-    marginBottom: 5,
-  },
-  balanceAmount: {
-    fontSize: 22, // Slightly reduced font size to match the image
-    fontWeight: 'bold',
-    color: '#000', // Black color for balance
-    marginTop: 5, // Added top margin for separation
-  },
-  paymentOptionsContainer: {
-    paddingVertical: 15,
-    backgroundColor: '#fff',
-    marginBottom: 10, // Space between payment options and cards section
-    flexDirection: 'row',
-    justifyContent: 'space-between', // Use space-between to distribute space
-    alignItems: 'flex-start', // Align items to the top
-    paddingHorizontal: 15, // Increased horizontal padding for more spacing
-  },
-  paymentOptionWrapper: {
-    alignItems: "center",
-  },
-  circularButton: {
-    backgroundColor: '#EDEEF3', // Added background color
-    borderRadius: 30, // Adjusted border radius to make it circular
-    width: 60, // Set a fixed width
-    height: 60, // Set a fixed height
-    justifyContent: 'center', // Center icon horizontally
-    alignItems: 'center', // Center icon vertically
-
-  },
-  paymentLabel: {    
-    fontSize: 10, // Reduced font size for better fit
-    marginTop: 5,
-    color: '#333',
-    textAlign: 'center', // Center the text under the icon
-  },  
-  myCardsSection: {
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15, // Adjusted padding
-    borderRadius: 8, // Rounded corners
-    borderWidth: 1, // Added border
-    marginHorizontal: 15,
-    marginBottom: 10,
-  },
-  myCardsText: {
+  input: {
+    flex: 1,
+    height: 40,
     fontSize: 16,
-    marginLeft: 10,
-    color: '#000',
-    flex: 1, // Allow text to take up available space
   },
-  creditCardSection: {
+  passwordToggle: {
+    padding: 10,
+  },
+  passwordHint: {
+    fontSize: 14,
+    color: '#888',
+    marginBottom: 30,
+  },
+  continueButton: {
+    backgroundColor: '#6a1b9a', // Purple color
+    padding: 15,
+    borderRadius: 5,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 15, // Adjusted padding
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginHorizontal: 15,
-    marginBottom: 10,
   },
-  creditCardTitle: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 5,
-  },
-  currentInvoiceLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-  },
-  currentInvoiceAmount: {
-    fontSize: 20,
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#E91E63', // A color for the invoice amount, similar to some card designs
-  },
-  limitText: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-  },
-  bottomContent: {
-    padding: 20,
+    marginRight: 10,
   },
 });
