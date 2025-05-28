@@ -1,10 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
-  const navigation = useNavigation();
   const router = useRouter();
 
   const handlePress = (item: string) => {
@@ -13,21 +11,21 @@ export default function SettingsScreen() {
   };
 
   const handleClose = () => {
-    navigation.goBack();
+    router.back();
   };
 
   return (
     <SafeAreaView>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleClose}> {/* Implement close functionality */}
+        <TouchableOpacity onPress={handleClose}>
           <Ionicons name="close" size={28} color="#000" />
         </TouchableOpacity>
         <View style={styles.userInfo}>
-          {/* Placeholder for avatar icon */}
           <Ionicons name="person-circle-outline" size={50} color="#673AB7" />
           <Text style={styles.userName}>Philipe</Text>
         </View>
       </View>
+
       <TouchableOpacity style={styles.menuItem} onPress={() => handlePress('Editar dados do perfil')}>
         <View style={styles.menuItemContent}>
           <Ionicons name="person-outline" size={24} color="#000" />
@@ -44,7 +42,7 @@ export default function SettingsScreen() {
         <Ionicons name="chevron-forward" size={24} color="#ccc" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.menuItem} onPress={() => router.replace('/')}> {/* Adjusted onPress to use router.replace */}
+      <TouchableOpacity style={styles.menuItem} onPress={() => router.replace('/')}>
         <View style={styles.menuItemContent}>
           <Ionicons name="log-out-outline" size={24} color="red" />
           <Text style={[styles.menuItemText, { color: 'red' }]}>Sair da conta</Text>
@@ -52,7 +50,7 @@ export default function SettingsScreen() {
         <Ionicons name="chevron-forward" size={24} color="#ccc" />
       </TouchableOpacity>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
