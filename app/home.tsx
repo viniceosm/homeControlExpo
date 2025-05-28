@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'; // Assuming Ionicons is available from @expo/vector-icons
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native'; // Add useFocusEffect
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react'; // Add useCallback
 import { BackHandler, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'; // Removed ParallaxScrollView import
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -17,26 +17,34 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const router = useRouter();
 
-  useEffect(() => {
-    const handleBackPress = () => {
-      if (navigation.canGoBack()) {
-        // Check if the current screen is 'home' before preventing back navigation
-        // Assuming the route name for this screen is 'home'
-        if (navigation.getCurrentRoute()?.name === 'home') {
-          // Prevent going back from the home screen
-          return true;
+  useFocusEffect(
+    useCallback(() => {
+      const handleBackPress = () => {
+        const currentRouteName = navigation.getState()?.routes[navigation.getState()?.index]?.name;
+        
+        // Only apply custom back handling if this screen is focused
+        // and navigation state is available.
+        if (navigation.isFocused() && currentRouteName === 'home') {
+          // If on home screen, and can't go back further in this stack, effectively prevent back.
+          // Or, if it's the initial screen in the stack, canGoBack might be false.
+          // The goal is to prevent exiting the app if home is the first screen or only screen in stack.
+          // If there are screens to go back to *within the same navigator stack*, allow it.
+          // This logic might need adjustment based on desired behavior for "preventing back from home".
+          // For now, let's assume if it's 'home', we want to prevent hardware back.
+          return true; // Prevent back action
         }
-        return false; // Allow going back from other screens
-      }
-      return true; // Prevent going back if there's no previous screen
-    };
+        // If not on the 'home' screen (according to this navigator's state)
+        // or if the screen is not focused, allow default back behavior.
+        return false; 
+      };
 
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-    return () => {
-      backHandler.remove();
-    };
-    // Added dependency array to useEffect
-  }, [navigation]);
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+      return () => {
+        backHandler.remove();
+      };
+    }, [navigation]) // navigation is a dependency
+  );
   return (
     <View style={styles.container}>
       {/* HEADER */}
