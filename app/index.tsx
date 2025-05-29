@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native'; // Added Image
 import { Ionicons } from '@expo/vector-icons'; // Assuming you have Ionicons available
 import { useRouter } from 'expo-router';
 
@@ -18,7 +18,10 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       {/* Placeholder for Logo */}
-      <View style={styles.logoPlaceholder}></View>
+      <Image
+        source={require('../assets/images/icon.png')}
+        style={styles.logoPlaceholder}
+      />
 
       <Text style={styles.title}>Acesse sua conta</Text>
 
@@ -60,9 +63,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logoPlaceholder: {
-    width: 100,
-    height: 100,
-    backgroundColor: '#eee', // Placeholder color
+    width: 200, // Changed from 100
+    height: 200, // Changed from 100
+    // backgroundColor: '#eee', // Removed
     alignSelf: 'center',
     marginTop: 50,
     marginBottom: 30,
